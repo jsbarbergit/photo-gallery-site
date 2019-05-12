@@ -7,7 +7,7 @@
              "s3:*"
           ],
           "Resource": [
-             "arn:aws:s3:::photos.jsbarber.net/*"
+             "arn:aws:s3:::jess-photo-albums/*"
           ]
        }
     ]

@@ -2,7 +2,6 @@ data "template_file" "cognito_unauth_trust_tpl" {
   template = "${file("iam_policies/cognito_unauth_trust_policy.tpl")}"
 
   vars = {
-    region  = "${var.region}"
     pool_id = "${aws_cognito_identity_pool.site_pool.id}"
   }
 }

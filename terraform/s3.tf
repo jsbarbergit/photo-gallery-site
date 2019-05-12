@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "site" {
-  bucket = "photos.jsbarber.net"
+  bucket = "${var.site_bucket}"
   acl    = "public-read"
   policy = "${file("s3_policies/photos.jsbarber.net_policy.json")}"
 
@@ -7,6 +7,11 @@ resource "aws_s3_bucket" "site" {
     index_document = "index.html"
     error_document = "error.html"
   }
+}
+
+resource "aws_s3_bucket" "albums" {
+  bucket = "${var.album_bucket}"
+  acl    = "private"
 
   cors_rule {
     allowed_headers = ["*"]
