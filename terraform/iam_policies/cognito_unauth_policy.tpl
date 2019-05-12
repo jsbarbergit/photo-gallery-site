@@ -7,7 +7,8 @@
              "s3:*"
           ],
           "Resource": [
-             "arn:aws:s3:::jess-photo-albums/*"
+             "arn:aws:s3:::jess-photo-albums/*",
+             "arn:aws:s3:::jess-photo-albums"
           ]
        }
     ]
