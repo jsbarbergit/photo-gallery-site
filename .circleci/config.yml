@@ -1,0 +1,12 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: governmentpaas/awscli:govuk-notify-latest
+
+    steps:
+      - checkout
+
+      - run:
+          name: Deploy to S3
+          command: aws s3 sync site/ s3://photos.jsbarber.net/ --exclude '.git/*'
