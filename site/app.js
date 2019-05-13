@@ -29,31 +29,21 @@ function listAlbums() {
           var prefix = commonPrefix.Prefix;
           var albumName = decodeURIComponent(prefix.replace('/', ''));
           return getHtml([
-            '<li>',
-              '<span onclick="deleteAlbum(\'' + albumName + '\')">X</span>',
-              '<span onclick="viewAlbum(\'' + albumName + '\')">',
-                albumName,
-              '</span>',
-            '</li>'
+              // '<a href="#" class="list-group-item" onclick="viewAlbum(\'' + albumName + '\')">',
+              //   albumName,
+              // '</a>',
+              '<li class="nav-item">',
+              '<a class="nav-link" onclick="viewAlbum(\'' + albumName + '\')" href="#' + albumName + '">' + albumName + '</a>',
+              '</li>',
           ]);
         });
-        var message = albums.length ?
-          getHtml([
-            '<p>Click on an album name to view it.</p>',
-            '<p>Click on the X to delete the album.</p>'
-          ]) :
-          '<p>You do not have any albums. Please Create album.';
         var htmlTemplate = [
-          '<h2>Albums</h2>',
-          message,
-          '<ul>',
-            getHtml(albums),
+          '<a class="navbar-brand" href="#" onclick="(listAlbums()")>Albums</a>',
+          '<ul class="navbar-nav">',
+            getHtml(albums), 
           '</ul>',
-          '<button onclick="createAlbum(prompt(\'Enter Album Name:\'))">',
-            'Create New Album',
-          '</button>'
         ]
-        document.getElementById('app').innerHTML = getHtml(htmlTemplate);
+        document.getElementById('albumNav').innerHTML = getHtml(htmlTemplate);
       }
     });
   }
@@ -100,7 +90,8 @@ function viewAlbum(albumName) {
       return getHtml([
         '<span>',
           '<div>',
-            '<img style="width:128px;height:128px;" src="' + photoUrl + '"/>',
+            // '<img style="width:128px;height:128px;" src="' + photoUrl + '"/>',
+            '<img class="img-fluid img-thumbnail" src="' + photoUrl + '"/>',  
           '</div>',
           '<div>',
             '<span onclick="deletePhoto(\'' + albumName + "','" + photoKey + '\')">',
@@ -132,7 +123,7 @@ function viewAlbum(albumName) {
         'Back To Albums',
       '</button>',
     ]
-    document.getElementById('app').innerHTML = getHtml(htmlTemplate);
+    document.getElementById('photos').innerHTML = getHtml(htmlTemplate);
   });
 }
 
