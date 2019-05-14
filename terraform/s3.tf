@@ -19,3 +19,14 @@ resource "aws_s3_bucket" "albums" {
     allowed_origins = ["*"]
   }
 }
+
+resource "aws_s3_bucket_notification" "image_resize_notification" {
+  bucket = "${aws_s3_bucket.albums.id}"
+
+  lambda_function {
+    lambda_function_arn = "${aws_lambda_function.image_resize_lambda.arn}"
+    events              = ["s3:ObjectCreated:*"]
+    filter_prefix       = "albums/"
+    filter_suffix       = ".jpg"
+  }
+}

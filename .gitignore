@@ -3,3 +3,4 @@ todo.txt
 .git/*
 terraform/.terraform
 *.tfstate
+*.tmp
