@@ -1,0 +1,24 @@
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgb(184, 186, 189);
+  }
+  
+  .flex-container > div {
+    background-color: rgb(184, 186, 189);
+    width: 300px;
+    margin: 10px;
+    text-align: center;
+    line-height: 75px;
+    font-size: 30px;
+  }
+
+#main {
+    position: relative; 
+}
+
+#photo-image {
+    cursor: pointer;  
+    transition: 0.3s;
+}
+#photo-image:hover {opacity: 0.7;}

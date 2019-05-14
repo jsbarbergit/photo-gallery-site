@@ -21,13 +21,14 @@ var s3 = new AWS.S3({
 });
 
 function listAlbums() {
-    s3.listObjects({Delimiter: '/'}, function(err, data) {
+    s3.listObjects({Delimiter: '/', Prefix: 'albums/'}, function(err, data) {
       if (err) {
         return alert('There was an error listing your albums: ' + err.message);
       } else {
         var albums = data.CommonPrefixes.map(function(commonPrefix) {
           var prefix = commonPrefix.Prefix;
-          var albumName = decodeURIComponent(prefix.replace('/', ''));
+          var albumNameSuffix = decodeURIComponent(prefix.replace('albums/', ''));
+          var albumName = decodeURIComponent(albumNameSuffix.replace('/', ''));
           return getHtml([
               // '<a href="#" class="list-group-item" onclick="viewAlbum(\'' + albumName + '\')">',
               //   albumName,
@@ -49,7 +50,7 @@ function listAlbums() {
   }
 
 function createAlbum(albumName) {
-  albumName = albumName.trim();
+  albumName = "albums/" + albumName.trim();
   if (!albumName) {
     return alert('Album names must contain at least one non-space character.');
   }
@@ -75,7 +76,7 @@ function createAlbum(albumName) {
 }
 
 function viewAlbum(albumName) {
-  var albumPhotosKey = encodeURIComponent(albumName) + '//';
+  var albumPhotosKey = 'albums/' + encodeURIComponent(albumName) + '/';
   s3.listObjects({Prefix: albumPhotosKey}, function(err, data) {
     if (err) {
       return alert('There was an error viewing your album: ' + err.message);
@@ -86,42 +87,25 @@ function viewAlbum(albumName) {
 
     var photos = data.Contents.map(function(photo) {
       var photoKey = photo.Key;
-      var photoUrl = bucketUrl + encodeURIComponent(photoKey);
-      return getHtml([
-        '<span>',
+      // var photoUrl = bucketUrl + encodeURIComponent(photoKey);
+      var photoUrl = bucketUrl + 'thumbnail/' + photoKey;
+      // Ignore folder level objects
+      if (! photoUrl.endsWith('/')) {
+        return getHtml([
           '<div>',
-            // '<img style="width:128px;height:128px;" src="' + photoUrl + '"/>',
-            '<img class="img-fluid img-thumbnail" src="' + photoUrl + '"/>',  
+            '<img id="photo-image" class="img-fluid img-rounded card-img-top"" src="' + photoUrl + '" onclick="displayModal(\'' + photoUrl + '\')"/>',  
+            //'<img id="photo-image" class="img-fluid img-rounded card-img-top"" src="' + photoUrl + '"/>',  
           '</div>',
-          '<div>',
-            '<span onclick="deletePhoto(\'' + albumName + "','" + photoKey + '\')">',
-              'X',
-            '</span>',
-            '<span>',
-              photoKey.replace(albumPhotosKey, ''),
-            '</span>',
-          '</div>',
-        '</span>',
-      ]);
+        ]);
+      }
+      
     });
     var message = photos.length ?
-      '<p>Click on the X to delete the photo</p>' :
+      '<p></p>' :
       '<p>You do not have any photos in this album. Please add photos.</p>';
     var htmlTemplate = [
-      '<h2>',
-        'Album: ' + albumName,
-      '</h2>',
       message,
-      '<div>',
-        getHtml(photos),
-      '</div>',
-      '<input id="photoupload" type="file" accept="image/*">',
-      '<button id="addphoto" onclick="addPhoto(\'' + albumName +'\')">',
-        'Add Photo',
-      '</button>',
-      '<button onclick="listAlbums()">',
-        'Back To Albums',
-      '</button>',
+      getHtml(photos),
     ]
     document.getElementById('photos').innerHTML = getHtml(htmlTemplate);
   });
@@ -134,7 +118,7 @@ function addPhoto(albumName) {
   }
   var file = files[0];
   var fileName = file.name;
-  var albumPhotosKey = encodeURIComponent(albumName) + '//';
+  var albumPhotosKey = encodeURIComponent(albumName) + '/';
 
   var photoKey = albumPhotosKey + fileName;
   s3.upload({
@@ -178,5 +162,21 @@ function deleteAlbum(albumName) {
       alert('Successfully deleted album.');
       listAlbums();
     });
+  });
+}
+
+function displayModal(thumbnailUrl) {
+  // Remove thumbnail/ string from url
+  var fullSizeImage = thumbnailUrl.replace('thumbnail/','')
+  console.log('new image --> ' + fullSizeImage)
+  var modalImg = document.getElementById("fullImage");
+  modalImg.src = fullSizeImage;
+  openPhotoModal();
+ 
+}
+
+function openPhotoModal() {
+  $(document).ready(function(){
+     $("#fullPhoto").modal();
   });
 }

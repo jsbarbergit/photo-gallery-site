@@ -11,11 +11,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
     <script src="./app.js"></script>
-    <style>
-        main {
-            position: relative; 
-        }
-        </style>
   </head>
   <body>
     <header>
@@ -57,8 +52,30 @@
             </script>
         </nav>
       </div>
-      <div id="photos"></div>
+      <div id="photos" class="flex-container thumbnail  "></div>
 
+      <div id="fullPhoto" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img class="modal-content" id="fullImage">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+      <div id="app"></div>
     </main>
+
+    <script type="text/javascript"> function showFullPhoto(imgUrl) {
+      $('#fullImage').attr("src", imgUrl.replace("thumbnail/",""));
+      $('#fullPhoto').modal('show');
+      console.log('script firing')
+   }</script>
   </body>
 </html>
