@@ -6,8 +6,8 @@ var gm = require('gm')
 var util = require('util');
 
 // constants
-var MAX_WIDTH  = 100;
-var MAX_HEIGHT = 100;
+var MAX_WIDTH  = 300;
+var MAX_HEIGHT = 300;
 
 // get reference to S3 client 
 var s3 = new AWS.S3();
@@ -20,7 +20,7 @@ exports.handler = function(event, context, callback) {
     var srcKey    =
     decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, " "));  
     var dstBucket = srcBucket;
-    var dstKey    =  srcKey + "_thumbnail";
+    var dstKey    =  "thumbnail/" + srcKey;
 
     // Infer the image type.
     var typeMatch = srcKey.match(/\.([^.]*)$/);
@@ -71,7 +71,8 @@ exports.handler = function(event, context, callback) {
                     Bucket: dstBucket,
                     Key: dstKey,
                     Body: data,
-                    ContentType: contentType
+                    ContentType: contentType,
+                    ACL: "public-read",
                 },
                 next);
             }
