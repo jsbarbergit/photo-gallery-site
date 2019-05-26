@@ -44,11 +44,13 @@ new AmazonCognitoIdentity.CognitoUser(userData);
         onSuccess: function (result) {
 			var accessToken = result.getAccessToken().getJwtToken();
 			console.log('Logged In :)');
+			alert("You are now logged in");
+			
         },
  
         onFailure: function(err) {
-			alert(err);
-			console.log('Failed To Log In :(');
+			console.log('Failed To Log In :( - ' + err);
+			alert("Doh. Failed to log in.")
         },
         // mfaRequired: function(codeDeliveryDetails) {
         //     var verificationCode = prompt('Please input verification code' ,'');
@@ -71,4 +73,27 @@ new AmazonCognitoIdentity.CognitoUser(userData);
 			cognitoUser.completeNewPasswordChallenge(newPassword, this.attributeList, this);
 		}
     });
+}
+
+async function validUser(){
+	let promise = new Promise(function(resolve, reject) {
+		var cognitoUser = userPool.getCurrentUser();
+		if (cognitoUser != null) {
+			cognitoUser.getSession(function(err, session) {
+				if (err) {
+				   alert("Error validating your credentials. You will need to log in again.");
+					resolve(false);
+				}
+				console.log('session validity: ' + session.isValid());
+				resolve(true);
+			});
+	
+		}
+		else {
+			alert("You are not logged in.");
+			resolve(false);
+		}
+	})
+	await promise;
+	return promise;
 }

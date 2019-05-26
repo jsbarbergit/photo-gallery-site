@@ -7,12 +7,9 @@ AWS.config.update({
   credentials: new AWS.CognitoIdentityCredentials({IdentityPoolId: identityPoolId,}),
   region: bucketRegion
 });
-console.log(AWS.config.credentials); 
 AWS.config.credentials.get(function (err) {
   if (err) 
     console.log(err);
-  else 
-    console.log(AWS.config.credentials);
 });
 
 var s3 = new AWS.S3({
@@ -49,8 +46,16 @@ function listAlbums() {
     });
   }
 
-function createAlbum(albumName) {
+async function createAlbum() {
+// TODO not working due to async callback
+  var isValidUser = await validUser();
+  if (! isValidUser) {
+    return;
+  }
+
+  var albumName = prompt("Enter Album Name","");
   albumName = "albums/" + albumName.trim();
+  return;
   if (!albumName) {
     return alert('Album names must contain at least one non-space character.');
   }
