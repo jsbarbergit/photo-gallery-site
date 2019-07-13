@@ -4,3 +4,4 @@ todo.txt
 terraform/.terraform
 *.tfstate
 *.tmp
+*.sha
