@@ -1,4 +1,16 @@
+resource "null_resource" "update_lambda_zip" {
+  # Ensure this runs every time
+  triggers {
+    rerun = "${uuid()}"
+  }
+
+  provisioner "local-exec" {
+    command     = "./create_lambda_package.sh image_resize"
+  }
+}
+
 resource "aws_lambda_function" "image_resize_lambda" {
+  depends_on       = ["null_resource.update_lambda_zip"]
   filename         = "lambda_functions/image_resize/function.zip"
   function_name    = "image_resizer"
   description      = "Resize .jpg and .png images to thumbnails. Triggered on S3 PutObject. Writes thumbnail back with _thumbnail suffix"

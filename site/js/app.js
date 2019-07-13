@@ -55,7 +55,7 @@ async function createAlbum() {
 
   var albumName = prompt("Enter Album Name","");
   albumName = "albums/" + albumName.trim();
-  return;
+  
   if (!albumName) {
     return alert('Album names must contain at least one non-space character.');
   }

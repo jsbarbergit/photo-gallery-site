@@ -29,7 +29,7 @@ exports.handler = function(event, context, callback) {
         return;
     }
     var imageType = typeMatch[1];
-    if (imageType != "jpg" && imageType != "png") {
+    if (imageType.toLowerCase() != "jpg" && imageType.toLowerCase() != "png") {
         callback('Unsupported image type: ${imageType}');
         return;
     }
