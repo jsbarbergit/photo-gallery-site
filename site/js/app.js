@@ -81,7 +81,7 @@ async function createAlbum() {
 }
 
 function viewAlbum(albumName) {
-  var albumPhotosKey = 'albums/' + encodeURIComponent(albumName) + '/';
+  var albumPhotosKey = 'albums/' + albumName + '/';
   s3.listObjects({Prefix: albumPhotosKey}, function(err, data) {
     if (err) {
       return alert('There was an error viewing your album: ' + err.message);
