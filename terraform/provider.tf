@@ -14,7 +14,7 @@ terraform {
     organization = "JBTFCloudOrg"
 
     workspaces {
-      name = "photo-gallery-site"
+      name = "jess-photo-gallery-site"
     }
   }
   version = "0.11.13"
