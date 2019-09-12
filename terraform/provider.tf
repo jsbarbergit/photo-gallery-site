@@ -4,12 +4,19 @@ provider "aws" {
 }
 
 terraform {
-  backend "s3" {
-    bucket = "jb-tf-remote-state"
-    key    = "photo-gallery-site/"
-    region = "eu-west-1"
-  }
+#  backend "s3" {
+#    bucket = "jb-tf-remote-state"
+#    key    = "photo-gallery-site/"
+#    region = "eu-west-1"
+#  }
+  backend "remote" {
+    hostname = "app.terraform.io"
+    organization = "JBTFCloudOrg"
 
+    workspaces {
+      name = "photo-gallery-site"
+    }
+  }
   version = "0.11.13"
 }
 
